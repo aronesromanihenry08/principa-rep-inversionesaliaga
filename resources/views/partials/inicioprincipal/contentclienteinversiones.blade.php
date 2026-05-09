@@ -241,7 +241,7 @@
 <div class="flex flex-wrap items-center gap-3 mb-8 mt-2 px-2 bg-white rounded-xl p-3 shadow-sm border border-gray-100">
     <div class="relative flex-1 min-w-[180px]">
         <select id="filtroCategoria" class="appearance-none bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg pl-10 pr-8 py-2 w-full focus:outline-none focus:ring-1 focus:ring-gray-300 transition cursor-pointer">
-            <option value="">Todas las categorías lateanos, muchas gracias lateanos</option>
+            <option value="">Todas las categorías</option>
             @foreach($categorias as $categoria) <option value="{{ $categoria->id_categoria }}">{{ $categoria->nombre_cat }}</option> @endforeach
         </select>
         <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
