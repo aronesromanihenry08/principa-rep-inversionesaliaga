@@ -1,7 +1,7 @@
 @php
     $menuItems = [
         [
-            'text' => 'Avisitos',
+            'text' => 'Avisos',
             'url' => auth()->check() ? route('admin.notificaciones') : route('login'),
             'icon' => '
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 mr-2 md:mb-1 md:mr-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
