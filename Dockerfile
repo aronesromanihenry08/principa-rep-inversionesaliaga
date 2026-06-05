@@ -15,4 +15,4 @@ COPY --from=assets-builder --chown=webuser:webuser /app/public /var/www/html/pub
 ENV AUTORUN_ENABLED=true
 
 # EXPOSE EL PUERTO CORRECTO PARA ESTA IMAGEN
-EXPOSE 8080
+EXPOSE 6000
