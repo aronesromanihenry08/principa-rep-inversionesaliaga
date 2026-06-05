@@ -1,35 +1,31 @@
-# === ETAPA 1: Compilar los Assets de JavaScript y CSS ===
-FROM node:20-alpine AS assets-builder
+# ========== ETAPA 1: Composer (dependencias PHP) ==========
+FROM composer:2.8 AS composer
 WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-progress --optimize-autoloader
 
-# Copiamos los archivos de configuración de Node
+# ========== ETAPA 2: Node (compilar assets con Vite) ==========
+FROM node:20-alpine AS node-builder
+WORKDIR /app
 COPY package*.json ./
-
-# Usamos npm ci (más rápido y estricto) o npm install, limitando el uso extremo de red/memoria
-RUN npm install --no-audit --no-fund
-
-# Instalamos los paquetes faltantes que te pedía Vite
-RUN npm install laravel-echo pusher-js
-
-# Copiamos el resto del código
+RUN npm ci --no-audit --no-fund 2>/dev/null || npm install --no-audit --no-fund
 COPY . .
-
-# Compilamos los assets
 RUN npm run build
 
-# === ETAPA 2: El servidor de Producción con PHP y Nginx ===
-FROM serversideup/php:8.2-fpm-nginx
+# ========== ETAPA 3: Imagen final (PHP + Nginx) ==========
+FROM serversideup/php:8.3-fpm-nginx AS production
 
-# Nos aseguramos de estar en el directorio correcto
 WORKDIR /var/www/html
 
-# Copiamos todo el código fuente y le damos la propiedad al usuario www-data
+# Copia todo el código fuente
 COPY --chown=www-data:www-data . .
 
-# Copiamos la carpeta pública compilada de la ETAPA 1
-COPY --from=assets-builder --chown=www-data:www-data /app/public /var/www/html/public
+# Añade vendor desde la etapa Composer
+COPY --from=composer --chown=www-data:www-data /app/vendor /var/www/html/vendor
+
+# Añade SOLO public/build desde la etapa Node
+COPY --from=node-builder --chown=www-data:www-data /app/public/build /var/www/html/public/build
 
 ENV AUTORUN_ENABLED=true
 
-# Mantenemos el puerto correcto de ServerSideUp
 EXPOSE 8080
