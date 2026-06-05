@@ -1,12 +1,18 @@
-# Usamos una imagen optimizada que ya tiene PHP 8.2, Apache y todas las extensiones instaladas
+# === ETAPA 1: Compilar los Assets de JavaScript y CSS ===
+FROM node:20-alpine AS assets-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# === ETAPA 2: El servidor de Producción con PHP y Nginx ===
 FROM serversideup/php:8.2-fpm-nginx
-
-# Cambiamos el directorio de trabajo predeterminado
 WORKDIR /var/www/html
-
-# Copiamos el proyecto al contenedor
 COPY --chown=webuser:webuser . .
+COPY --from=assets-builder --chown=webuser:webuser /app/public /var/www/html/public
 
-# El servidor web de esta imagen ya apunta a la carpeta /public de Laravel por defecto
-# e instala Composer automáticamente de ser necesario en producción.
 ENV AUTORUN_ENABLED=true
+
+# EXPOSE EL PUERTO CORRECTO PARA ESTA IMAGEN
+EXPOSE 8080
