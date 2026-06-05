@@ -99,7 +99,7 @@ Route::middleware(['throttle:10,1'])->group(function () {
 // ADMIN PERFIL
 Route::middleware(['auth', 'checkRol:admin,gerente,cajero,vendedor'])->group(function () {
     Route::get('/admin/perfil', [PerfilAdminController::class, 'edit'])->name('perfiladm.perfildeadmn');
-    Route::post('/admin/perfil', [PerfilAdminController::class, 'update'])->name('perfiladm.perfildeadmn');
+    Route::post('/admin/perfil', [PerfilAdminController::class, 'update'])->name('perfiladm.perfildeadmnupdate');
     Route::post('/admin/usuarios', [PerfilAdminController::class, 'store'])->name('usuarios.store');
     Route::post('/admin/usuarios/{id}', [PerfilAdminController::class, 'updateUser'])->name('usuarios.update');
     Route::post('/admin/usuarios/{id}/toggle', [PerfilAdminController::class, 'toggleStatus'])->name('usuarios.toggle');
