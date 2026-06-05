@@ -12,6 +12,8 @@
         "@tailwindcss/aspect-ratio": "^0.4.2",
         "alpinejs": "^3.4.2",
         "axios": "^1.8.2",
+        "laravel-echo": "^1.16.1",
+        "pusher-js": "^8.4.0",
         "sweetalert2": "^11.22.2"
     },
     "devDependencies": {
