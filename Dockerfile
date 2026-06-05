@@ -5,13 +5,16 @@ WORKDIR /app
 # Copiamos los archivos de configuración de Node
 COPY package*.json ./
 
-# Usamos Yarn para instalar TODO sin errores de npm
+# Instalamos las dependencias base de tu proyecto
 RUN yarn install
+
+# AGREGAMOS ESTA LÍNEA para forzar la instalación del paquete que Vite te está reclamando
+RUN yarn add laravel-echo pusher-js
 
 # Copiamos el resto del código necesario para compilar
 COPY . .
 
-# Compilamos usando el script de tu package.json con yarn
+# Compilamos los assets
 RUN yarn build
 
 
@@ -28,5 +31,5 @@ COPY --from=assets-builder --chown=webuser:webuser /app/public /var/www/html/pub
 
 ENV AUTORUN_ENABLED=true
 
-# Exponemos el puerto interno estándar de ServerSideUp
+# Mantenemos el puerto correcto de ServerSideUp
 EXPOSE 8080
