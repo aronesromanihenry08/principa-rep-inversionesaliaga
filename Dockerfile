@@ -5,14 +5,14 @@ WORKDIR /app
 # Copiamos los archivos de configuración de Node
 COPY package*.json ./
 
-# Forzamos la instalación de todas las dependencias (incluyendo devDependencies como Vite)
-RUN npm install --include=dev
+# Usamos Yarn para instalar TODO sin errores de npm
+RUN yarn install
 
 # Copiamos el resto del código necesario para compilar
 COPY . .
 
-# Ahora sí encontrará Vite para compilar
-RUN npm run build
+# Compilamos usando el script de tu package.json con yarn
+RUN yarn build
 
 
 # === ETAPA 2: El servidor de Producción con PHP y Nginx ===
@@ -28,5 +28,5 @@ COPY --from=assets-builder --chown=webuser:webuser /app/public /var/www/html/pub
 
 ENV AUTORUN_ENABLED=true
 
-# Exponemos el puerto interno del contenedor
-EXPOSE 6000
+# Exponemos el puerto interno estándar de ServerSideUp
+EXPOSE 8080
