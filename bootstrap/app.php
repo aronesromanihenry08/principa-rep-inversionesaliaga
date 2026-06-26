@@ -12,26 +12,19 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
-        
-        
-        
     )
     ->withMiddleware(function (Middleware $middleware): void {
         
-    $middleware->statefulApi();
-    $middleware->alias([
-        'checkRol' => App\Http\Middleware\VerificarRol::class, 
-        'api.key' => \App\Http\Middleware\ValidateApiKey::class,// 👈 aquí agregamos el nuevo
+        // 🚀 CORRECCIÓN CLOUD RUN: Confiar en todos los proxies para HTTPS
+        $middleware->trustProxies(at: '*');
+        
+        $middleware->statefulApi();
+        $middleware->alias([
+            'checkRol' => App\Http\Middleware\VerificarRol::class, 
+            'api.key' => \App\Http\Middleware\ValidateApiKey::class,
         ]);
     
-        
-    // Aplicar throttle global a todas las rutas web (si lo usas)
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-        
-        
     })->create();
-    
-
-    
