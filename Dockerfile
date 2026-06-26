@@ -17,17 +17,20 @@ FROM serversideup/php:8.3-fpm-nginx AS production
 
 WORKDIR /var/www/html
 
-# 1. Copia todo el código fuente original
+# Copia todo el código fuente original
 COPY --chown=www-data:www-data . .
 
-# 2. Añade vendor desde la etapa Composer
+# Añade vendor desde la etapa Composer
 COPY --from=composer --chown=www-data:www-data /app/vendor /var/www/html/vendor
 
-# 3. ¡CAMBIO AQUÍ! Añade TODO el contenido de public compilado por Node
-# Esto asegura que el manifest.json y los assets finales queden sincronizados.
+# Añade TODO el contenido de public compilado por Node (Vite)
 COPY --from=node-builder --chown=www-data:www-data /app/public /var/www/html/public
 
-ENV AUTORUN_ENABLED=true
+# Asegura permisos correctos para que Laravel 12 pueda escribir caché y subir archivos
+RUN chmod -R 775 storage bootstrap/cache && chown -R www-data:www-data storage bootstrap/cache
 
-# Nota: Google Cloud Run ignora EXPOSE, pero está bien dejarlo documentado.
+# CORRECCIÓN AQUÍ: Crea el enlace simbólico y optimiza Laravel al compilar la imagen
+RUN php artisan storage:link --force && php artisan config:cache && php artisan route:cache
+
+ENV AUTORUN_ENABLED=true
 EXPOSE 8080
