@@ -8,10 +8,7 @@ use Google\Cloud\Storage\StorageClient;
 class StorageController extends Controller
 {
     // Equivalente a @app.route("/")
-    public function home()
-    {
-        return view('index', ['title' => 'Equisd']);
-    }
+
 
     // Equivalente a @app.route("/storage", methods=["GET", "POST"])
     public function storageRoute(Request $request)
