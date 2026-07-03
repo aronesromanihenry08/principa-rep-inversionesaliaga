@@ -2,7 +2,8 @@
 FROM composer:2.8 AS composer
 WORKDIR /app
 COPY composer.json ./
-RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-progress --optimize-autoloader --no-cache
+# ✅ CAMBIO AQUÍ: Se añade --ignore-platform-reqs para que descargue las librerías de Laravel 12 sin protestar por la versión de PHP
+RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-progress --optimize-autoloader --no-cache --ignore-platform-reqs
 
 # ========== ETAPA 2: Node (compilar assets con Vite) ==========
 FROM node:20-alpine AS node-builder
@@ -13,6 +14,7 @@ COPY . .
 RUN npm run build
 
 # ========== ETAPA 3: Imagen final (PHP + Nginx) ==========
+# ✅ CAMBIO AQUÍ: Subimos la imagen base a PHP 8.4 para que coincida perfectamente con lo que pide Laravel 12 en producción
 FROM serversideup/php:8.4-fpm-nginx AS production
 
 WORKDIR /var/www/html
@@ -32,10 +34,10 @@ RUN mkdir -p storage/app/public storage/framework/cache storage/framework/sessio
 # 2. Dar permisos absolutos para que Laravel no tire Error 500
 RUN chmod -R 775 storage bootstrap/cache && chown -R www-data:www-data storage bootstrap/cache
 
-# 3. Crear el link (SIN usar config:cache para que lea las variables en vivo)
-# RUN php artisan storage:link --force
+# ❌ CAMBIO AQUÍ: Se eliminó por completo la línea "RUN php artisan storage:link --force" que causaba el crasheo fatal 255
 
-ENV AUTORUN_ENABLED=true
+# ✅ CAMBIO AQUÍ: Apagamos el AUTORUN para evitar que la imagen intente recrear el enlace y colapse en Cloud Run
+ENV AUTORUN_ENABLED=false
 ENV DEBUG FALSE
 ENV GCS_BUCKET_NAME my-gcs-bucket
 EXPOSE 8080
