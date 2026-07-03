@@ -1,8 +1,8 @@
 # ========== ETAPA 1: Composer (dependencias PHP) ==========
 FROM composer:2.8 AS composer
 WORKDIR /app
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-progress --optimize-autoloader
+COPY composer.json ./
+RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-progress --optimize-autoloader --no-cache
 
 # ========== ETAPA 2: Node (compilar assets con Vite) ==========
 FROM node:20-alpine AS node-builder
