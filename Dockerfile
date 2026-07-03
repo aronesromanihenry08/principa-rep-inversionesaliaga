@@ -37,5 +37,5 @@ RUN php artisan storage:link --force
 
 ENV AUTORUN_ENABLED=true
 ENV DEBUG FALSE
-ENV mialmacenamientoinversionesaliaga my-gcs-bucket
+ENV GCS_BUCKET_NAME my-gcs-bucket
 EXPOSE 8080
