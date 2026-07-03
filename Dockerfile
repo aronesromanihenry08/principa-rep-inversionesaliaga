@@ -33,7 +33,7 @@ RUN mkdir -p storage/app/public storage/framework/cache storage/framework/sessio
 RUN chmod -R 775 storage bootstrap/cache && chown -R www-data:www-data storage bootstrap/cache
 
 # 3. Crear el link (SIN usar config:cache para que lea las variables en vivo)
-RUN php artisan storage:link --force
+# RUN php artisan storage:link --force
 
 ENV AUTORUN_ENABLED=true
 ENV DEBUG FALSE
