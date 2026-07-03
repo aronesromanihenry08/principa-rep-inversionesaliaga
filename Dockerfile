@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # ========== ETAPA 3: Imagen final (PHP + Nginx) ==========
-FROM serversideup/php:8.3-fpm-nginx AS production
+FROM serversideup/php:8.4-fpm-nginx AS production
 
 WORKDIR /var/www/html
 
@@ -33,7 +33,7 @@ RUN mkdir -p storage/app/public storage/framework/cache storage/framework/sessio
 RUN chmod -R 775 storage bootstrap/cache && chown -R www-data:www-data storage bootstrap/cache
 
 # 3. Crear el link (SIN usar config:cache para que lea las variables en vivo)
-RUN php artisan storage:link --force
+# RUN php artisan storage:link --force
 
 ENV AUTORUN_ENABLED=true
 ENV DEBUG FALSE
