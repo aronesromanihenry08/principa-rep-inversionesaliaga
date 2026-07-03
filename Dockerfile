@@ -36,4 +36,6 @@ RUN chmod -R 775 storage bootstrap/cache && chown -R www-data:www-data storage b
 RUN php artisan storage:link --force
 
 ENV AUTORUN_ENABLED=true
+ENV DEBUG FALSE
+ENV mialmacenamientoinversionesaliaga my-gcs-bucket
 EXPOSE 8080
