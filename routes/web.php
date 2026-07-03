@@ -65,7 +65,6 @@ Route::middleware(['auth', 'checkRol:admin,gerente,cajero,vendedor', 'throttle:3
 
 
 // Ruta Home (GET)
-Route::get('/', [StorageController::class, 'home']);
 
 // Rutas para el almacenamiento (Maneja GET y POST en la misma URL)
 Route::get('/storage', [StorageController::class, 'storageRoute']);
