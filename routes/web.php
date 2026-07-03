@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Admin\MovimientoCajaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StorageController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReporteController;
@@ -61,6 +62,14 @@ Route::middleware(['auth', 'checkRol:admin,gerente,cajero,vendedor', 'throttle:3
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
     Route::put('/productos/{id}/reactivar', [ProductoController::class, 'reactivar'])->name('productos.reactivar');
 });
+
+
+// Ruta Home (GET)
+Route::get('/', [StorageController::class, 'home']);
+
+// Rutas para el almacenamiento (Maneja GET y POST en la misma URL)
+Route::get('/storage', [StorageController::class, 'storageRoute']);
+Route::post('/storage', [StorageController::class, 'storageRoute']);
 
 // CARRITO
 Route::get('/carrito', function () {
